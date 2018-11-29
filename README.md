@@ -1,4 +1,5 @@
-# CETAV Javascript 2 Project Template
+# CETAV Javascript Proyecto Final.
+# Desarrolladores: Jimmy Alvarez. // Cristian Calderón.
 
 ## Requirements
 
