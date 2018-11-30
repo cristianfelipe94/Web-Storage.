@@ -1,7 +1,7 @@
-//Get the elements from the DOM.
+// Get the elements from the DOM.
 const canvasArea = document.getElementById('canvasArea');
 
-//Set the Canvas Width and Height as the Window.
+// Set the Canvas Width and Height as the Window.
 canvasArea.width = window.innerWidth;
 canvasArea.height = window.innerHeight;
 
@@ -20,17 +20,19 @@ const xRightVelocity = 0;
 const xLeftVelocity = 0;
 const color = 'red';
 
+// Main Character, this Character is an object with 'Caracteristics' or 'Parameters'
+// The Parameters will be saved on its respective 'Key' or 'Variable'.
 function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftVelocityKey, xRightVelocityKey, colorKey) {
-  this.xKey = x;
-  this.yKey = y;
-  this.radiusKey = radius;
-  this.startPointKey = startPoint;
-  this.endPointKey = endPoint;
-  this.xLeftVelocityKey = xLeftVelocity;
-  this.xRightVelocityKey = xRightVelocity;
-  this.colorKey = color;
+  this.xKey = xKey;
+  this.yKey = yKey;
+  this.radiusKey = radiusKey;
+  this.startPointKey = startPointKey;
+  this.endPointKey = endPointKey;
+  this.xLeftVelocityKey = xLeftVelocityKey;
+  this.xRightVelocityKey = xRightVelocityKey;
+  this.colorKey = colorKey;
 
-
+  // This Function will live inside the Object as part of it.
   this.drawAnimation = function () {
     canvasContext.beginPath();
     canvasContext.arc(this.xKey, this.yKey, this.radiusKey, this.startPointKey, this.endPointKey, this.xRightVelocityKey, this.xLeftVelocityKey, this.colorKey, false);
@@ -38,6 +40,8 @@ function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftV
     canvasContext.stroke();
   };
 
+  // This Function will live inside the Object as part of it.
+  // At the end of this Function another function will run.
   this.updatedAnimation = function () {
     this.xKey += this.xRightVelocityKey;
     this.xKey -= this.xLeftVelocityKey;
@@ -46,7 +50,7 @@ function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftV
 }
 
 // Create an Element that will get all the Parameters and Characteristics from the Main Object.
-const newCharacter = new MainCharacter(this.xKey, this.yKey, this.radiusKey, this.startPointKey, this.endPointKey, this.xLeftVelocityKey, this.xRightVelocityKey, this.colorKey, false);
+const newCharacter = new MainCharacter(x, y, radius, startPoint, endPoint, xLeftVelocity, xRightVelocity, color, false);
 
 // Move function.
 // Function will create a Loop with the AnimationFrame.
