@@ -5,6 +5,7 @@ const canvasArea = document.getElementById('canvasArea');
 canvasArea.width = window.innerWidth;
 canvasArea.height = window.innerHeight;
 
+
 // Create a context for the Canvas Field.
 // Canvas context is 2d.
 const canvasContext = canvasArea.getContext('2d');
