@@ -1,5 +1,7 @@
 // Get the elements from the DOM.
 const canvasArea = document.getElementById('canvasArea');
+const timerBtn = document.getElementById('timerBtn');
+let timer = document.getElementById('timer');
 const leftBtn = document.getElementById('leftBtn');
 const rightBtn = document.getElementById('rightBtn');
 
@@ -7,6 +9,25 @@ const rightBtn = document.getElementById('rightBtn');
 canvasArea.width = window.innerWidth;
 canvasArea.height = window.innerHeight + 20;
 
+let timerBtnState = false;
+let startSeconds = 0;
+timer.innerHTML = 'Start game';
+
+
+timerBtn.addEventListener('click', function () {
+  if (timerBtnState === false) {
+    timer.innerHTML = '';
+    timer.innerHTML = startSeconds;
+    console.log('stoped');
+    timerBtnState = true;
+  } else if (timerBtnState === true) {
+    do {
+      startSeconds += startSeconds + 1;
+      timer.innerHTML = startSeconds;
+    } while (timerBtnState === true);
+  }
+  timerBtnState = false;
+});
 
 // Create a context for the Canvas Field.
 // Canvas context is 2d.
