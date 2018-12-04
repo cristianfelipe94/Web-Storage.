@@ -1,5 +1,7 @@
 // Get the elements from the DOM.
 const canvasArea = document.getElementById('canvasArea');
+const leftBtn = document.getElementById('leftBtn');
+const rightBtn = document.getElementById('rightBtn');
 
 // Set the Canvas Width and Height as the Window.
 canvasArea.width = window.innerWidth;
@@ -17,8 +19,8 @@ const y = canvasArea.height / 1.5;
 const startPoint = 0;
 const endPoint = Math.PI * 2;
 const radius = 50;
-const xRightVelocity = 0;
-const xLeftVelocity = 0;
+let xRightVelocity = 0;
+let xLeftVelocity = 0;
 const color = 'red';
 
 // Main Character, this Character is an object with 'Caracteristics' or 'Parameters'
@@ -65,3 +67,30 @@ function animateDraw() {
 
 // Call the AnimatedDraw Function.
 animateDraw();
+
+// Set the EventListeners to the Btns.
+leftBtn.addEventListener('click', function (event) {
+  newCharacter.xRightVelocityKey = 0;
+  newCharacter.xLeftVelocityKey = 2;
+  newCharacter.colorKey = 'blue';
+  console.log('movingLeft');
+  console.log(newCharacter);
+});
+
+rightBtn.addEventListener('click', function (event) {
+  newCharacter.xRightVelocityKey = 2;
+  newCharacter.xLeftVelocityKey = 0;
+  newCharacter.colorKey = 'green';
+  console.log('movingRight');
+  console.log(newCharacter);
+});
+
+setInterval(function () {
+  if (newCharacter.xKey + newCharacter.radiusKey * 2 > window.innerWidth) {
+    newCharacter.xRightVelocityKey = 0;
+    newCharacter.xLeftVelocityKey = 1;
+  } else if (newCharacter.xKey + newCharacter.radiusKey * 2 < (window.innerWidth - window.innerWidth - newCharacter.radiusKey * 2)) {
+    newCharacter.xRightVelocityKey = 1;
+    newCharacter.xLeftVelocityKey = 0;
+  }
+}, 250);
