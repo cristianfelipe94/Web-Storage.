@@ -5,7 +5,7 @@ const rightBtn = document.getElementById('rightBtn');
 
 // Set the Canvas Width and Height as the Window.
 canvasArea.width = window.innerWidth;
-canvasArea.height = window.innerHeight;
+canvasArea.height = window.innerHeight + 20;
 
 
 // Create a context for the Canvas Field.
@@ -18,7 +18,7 @@ const x = canvasArea.width / 2;
 const y = canvasArea.height / 1.5;
 const startPoint = 0;
 const endPoint = Math.PI * 2;
-const radius = 50;
+const radius = 25;
 let xRightVelocity = 0;
 let xLeftVelocity = 0;
 const color = 'red';
@@ -71,14 +71,14 @@ animateDraw();
 // Set the EventListeners to the Btns.
 leftBtn.addEventListener('click', function (event) {
   newCharacter.xRightVelocityKey = 0;
-  newCharacter.xLeftVelocityKey = 2;
+  newCharacter.xLeftVelocityKey = 3;
   newCharacter.colorKey = 'blue';
   console.log('movingLeft');
   console.log(newCharacter);
 });
 
 rightBtn.addEventListener('click', function (event) {
-  newCharacter.xRightVelocityKey = 2;
+  newCharacter.xRightVelocityKey = 3;
   newCharacter.xLeftVelocityKey = 0;
   newCharacter.colorKey = 'green';
   console.log('movingRight');
@@ -86,11 +86,11 @@ rightBtn.addEventListener('click', function (event) {
 });
 
 setInterval(function () {
-  if (newCharacter.xKey + newCharacter.radiusKey * 2 > window.innerWidth) {
+  if (newCharacter.xKey + newCharacter.radiusKey > window.innerWidth - newCharacter.radiusKey) {
     newCharacter.xRightVelocityKey = 0;
-    newCharacter.xLeftVelocityKey = 1;
-  } else if (newCharacter.xKey + newCharacter.radiusKey * 2 < (window.innerWidth - window.innerWidth - newCharacter.radiusKey * 2)) {
-    newCharacter.xRightVelocityKey = 1;
+    newCharacter.xLeftVelocityKey = 5;
+  } else if (newCharacter.xKey - newCharacter.radiusKey < (window.innerWidth - window.innerWidth + newCharacter.radiusKey)) {
+    newCharacter.xRightVelocityKey = 5;
     newCharacter.xLeftVelocityKey = 0;
   }
-}, 250);
+}, 50);

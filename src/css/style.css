@@ -1,5 +1,6 @@
 body {
-  margin: 0; }
+  margin: 0;
+  overflow: hidden; }
 
 canvas {
   border: 2px solid black;
@@ -19,6 +20,8 @@ canvas {
   cursor: pointer;
   height: 20%;
   width: 50%; }
+  .btnL:hover {
+    opacity: 0.3; }
 
 .btnR {
   right: 0;
@@ -30,5 +33,15 @@ canvas {
   cursor: pointer;
   height: 20%;
   width: 50%; }
+  .btnR:hover {
+    opacity: 0.3; }
+
+.backgroundImgGame {
+  height: 100%;
+  width: 100%;
+  min-width: 564px;
+  position: absolute;
+  top: 0;
+  z-index: -1; }
 
 /*# sourceMappingURL=style.css.map */
