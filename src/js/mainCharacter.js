@@ -42,7 +42,7 @@ const endPoint = Math.PI * 2;
 const radius = 25;
 const xRightVelocity = 0;
 const xLeftVelocity = 0;
-const color = 'red';
+const color = 'black';
 
 // Main Character, this Character is an object with 'Caracteristics' or 'Parameters'
 // The Parameters will be saved on its respective 'Key' or 'Variable'.
@@ -68,6 +68,9 @@ function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftV
   this.drawAnimationMainChar = function () {
     canvasContext.beginPath();
     canvasContext.arc(this.xKey, this.yKey, this.radiusKey, this.startPointKey, this.endPointKey, this.xRightVelocityKey, this.xLeftVelocityKey, this.colorKey, false);
+    canvasContext.fillStyle = 'red';
+    canvasContext.fill();
+    canvasContext.lineWidth = 2;
     canvasContext.strokeStyle = this.colorKey;
     canvasContext.stroke();
   };
@@ -78,15 +81,20 @@ const newCharacter = new MainCharacter(x, y, radius, startPoint, endPoint, xLeft
 
 // Enemy Character.
 // Variables for the Character.
-const xEnemy = generateRandomValue(canvasArea.width);
 const yEnemy = canvasArea.height;
 const colorEnemy = 'blue';
-const gravity = 6;
+const gravityValue = 6;
+const radiusValue = 30;
+const xEnemy = generateRandomValue(canvasArea.width);
+const gravity = generateRandomValue(gravityValue);
+const radiusEnemy = generateRandomValue(radiusValue);
 
-function generateRandomValue (maxWidth) {
-  let maxNumb = maxWidth;
+function generateRandomValue (maxValue) {
+  let maxNumb = maxValue;
   let randomNumb = parseInt(Math.random() * maxNumb);
-  console.log(randomNumb);
+  if (randomNumb < 3) {
+    randomNumb += 3
+  }
   return randomNumb;
 }
 
@@ -113,6 +121,9 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
   this.drawAnimationEnemy = function () {
     canvasContext.beginPath();
     canvasContext.arc(this.xEnemyKey, this.yEnemyKey, this.radiusKey, this.startPointKey, this.endPointKey, this.colorEnemyKey, gravityKey, false);
+    canvasContext.fillStyle = 'black';
+    canvasContext.fill();
+    canvasContext.lineWidth = 1;
     canvasContext.strokeStyle = this.colorEnemyKey;
     canvasContext.stroke();
   };
@@ -122,10 +133,12 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
 let arrayEnemies = [];
 
 setInterval(function (){
-  let newCharacterEnemy = new EnemyCharacter(xEnemy, yEnemy, radius, startPoint, endPoint, colorEnemy, gravity, false);
-  arrayEnemies.push(newCharacterEnemy);
+  const xEnemy = generateRandomValue(canvasArea.width);
+  const gravity = generateRandomValue(gravityValue);
+  const radiusEnemy = generateRandomValue(radiusValue);
+  arrayEnemies.push(new EnemyCharacter(xEnemy, yEnemy, radiusEnemy, startPoint, endPoint, colorEnemy, gravity, false));
   console.log(arrayEnemies);
-}, 3000);
+}, 5000);
 
 
 // Move function.
@@ -142,6 +155,8 @@ function animateDraw() {
       newCharacter.xRightVelocityKey = 0;
       newCharacter.xLeftVelocityKey = 0;
       element.gravityKey = 0;
+    } else {
+      element.gravityKey = generateRandomValue(gravityValue);
     }
     if (element.yEnemyKey + element.radiusKey > window.innerHeight + element.radiusKey * 2) {
       element.yEnemyKey = canvasArea.height - canvasArea.height - 100;
@@ -162,13 +177,11 @@ animateDraw();
 leftBtn.addEventListener('click', function (event) {
   newCharacter.xRightVelocityKey = 0;
   newCharacter.xLeftVelocityKey = 3;
-  newCharacter.colorKey = 'blue';
 });
 
 rightBtn.addEventListener('click', function (event) {
   newCharacter.xRightVelocityKey = 3;
   newCharacter.xLeftVelocityKey = 0;
-  newCharacter.colorKey = 'green';
 });
 
 
