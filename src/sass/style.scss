@@ -3,6 +3,7 @@
 body {
   margin: 0;
   overflow: hidden;
+  position: absolute;
 }
 
 
@@ -11,7 +12,7 @@ body {
 canvas {
   border: 2px solid black;
   min-width: 320px;
-  position: relative;
+  position: absolute;
 }
 
 .btns {
@@ -51,10 +52,11 @@ canvas {
 }
 
 .backgroundImgGame {
-  height: 100%;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   min-width: 564px;
-  position: absolute;
+  position: relative;
+  min-height: -webkit-fill-available;
   top: 0;
   z-index: -1;
 }
