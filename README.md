@@ -1,5 +1,5 @@
 # CETAV Javascript Proyecto Final.
-# Desarrolladores: Jimmy Alvarez. // Cristian Calderón.
+# Desarrolladores: Cristian Calderón.
 
 ## Requirements
 

@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  overflow: hidden; }
+
+canvas {
+  border: 2px solid black;
+  min-width: 320px;
+  position: relative; }
+
+.btns {
+  position: absolute; }
+
+.btnL {
+  left: 0;
+  bottom: -2%;
+  font-size: 3rem;
+  background-color: red;
+  opacity: 0.5;
+  color: white;
+  cursor: pointer;
+  height: 20%;
+  min-height: 100px;
+  width: 50%; }
+  .btnL:hover {
+    opacity: 0.3; }
+
+.btnR {
+  right: 0;
+  bottom: -2%;
+  font-size: 3rem;
+  background-color: red;
+  opacity: 0.5;
+  color: white;
+  cursor: pointer;
+  height: 20%;
+  min-height: 100px;
+  width: 50%; }
+  .btnR:hover {
+    opacity: 0.3; }
+
+.backgroundImgGame {
+  height: 100%;
+  width: 100%;
+  min-width: 564px;
+  position: absolute;
+  top: 0;
+  z-index: -1; }
+
+.timerWrapper {
+  background-color: red;
+  height: 50px;
+  width: 100px;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 100px;
+  right: 0;
+  left: 0; }
+
+/*# sourceMappingURL=style.css.map */

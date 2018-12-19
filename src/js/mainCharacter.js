@@ -44,10 +44,9 @@ const xRightVelocity = 0;
 const xLeftVelocity = 0;
 const color = 'red';
 
-
 // Main Character, this Character is an object with 'Caracteristics' or 'Parameters'
 // The Parameters will be saved on its respective 'Key' or 'Variable'.
-function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftVelocityKey, xRightVelocityKey, colorKey, gravityKey) {
+function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftVelocityKey, xRightVelocityKey, colorKey) {
   this.xKey = xKey;
   this.yKey = yKey;
   this.radiusKey = radiusKey;
@@ -56,35 +55,40 @@ function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftV
   this.xLeftVelocityKey = xLeftVelocityKey;
   this.xRightVelocityKey = xRightVelocityKey;
   this.colorKey = colorKey;
-  this.gravityKey = gravityKey;
 
   // This Function will live inside the Object as part of it.
-  this.drawAnimation = function () {
+  // At the end of this Function another function will run.
+  this.updatedAnimationMainChar = function () {
+    this.xKey += this.xRightVelocityKey;
+    this.xKey -= this.xLeftVelocityKey;
+    this.drawAnimationMainChar();
+  };
+
+  // This Function will live inside the Object as part of it.
+  this.drawAnimationMainChar = function () {
     canvasContext.beginPath();
     canvasContext.arc(this.xKey, this.yKey, this.radiusKey, this.startPointKey, this.endPointKey, this.xRightVelocityKey, this.xLeftVelocityKey, this.colorKey, false);
     canvasContext.strokeStyle = this.colorKey;
     canvasContext.stroke();
-  };
-
-  // This Function will live inside the Object as part of it.
-  // At the end of this Function another function will run.
-  this.updatedAnimation = function () {
-    this.xKey += this.xRightVelocityKey;
-    this.xKey -= this.xLeftVelocityKey;
-    this.yKey += this.gravityKey;
-    this.drawAnimation();
   };
 }
 
 // Create an Element that will get all the Parameters and Characteristics from the Main Object.
 const newCharacter = new MainCharacter(x, y, radius, startPoint, endPoint, xLeftVelocity, xRightVelocity, color, false);
 
-// Main Character.
+// Enemy Character.
 // Variables for the Character.
-const xEnemy = (Math.random(canvasArea.width) / 5);
-const yEnemy = canvasArea.height - radius;
-const colorEnemy = 'red';
+const xEnemy = generateRandomValue(canvasArea.width);
+const yEnemy = canvasArea.height;
+const colorEnemy = 'blue';
 const gravity = 6;
+
+function generateRandomValue (maxWidth) {
+  let maxNumb = maxWidth;
+  let randomNumb = parseInt(Math.random() * maxNumb);
+  console.log(randomNumb);
+  return randomNumb;
+}
 
 
 // Main Character, this Character is an object with 'Caracteristics' or 'Parameters'
@@ -99,22 +103,29 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
   this.gravityKey = gravityKey;
 
   // This Function will live inside the Object as part of it.
-  this.drawAnimation = function () {
+  // At the end of this Function another function will run.
+  this.updatedAnimationEnemy = function () {
+    this.yEnemyKey += this.gravityKey;
+    this.drawAnimationEnemy();
+  };
+
+  // This Function will live inside the Object as part of it.
+  this.drawAnimationEnemy = function () {
     canvasContext.beginPath();
     canvasContext.arc(this.xEnemyKey, this.yEnemyKey, this.radiusKey, this.startPointKey, this.endPointKey, this.colorEnemyKey, gravityKey, false);
     canvasContext.strokeStyle = this.colorEnemyKey;
     canvasContext.stroke();
   };
-
-  // This Function will live inside the Object as part of it.
-  // At the end of this Function another function will run.
-  this.updatedAnimation = function () {
-    this.yEnemy += this.gravityKey;
-    this.drawAnimation();
-  };
 }
 
-const newCharacterEnemy = new EnemyCharacter(xEnemy, yEnemy, radius, startPoint, endPoint, colorEnemy, gravity, false);
+
+let arrayEnemies = [];
+
+setInterval(function (){
+  let newCharacterEnemy = new EnemyCharacter(xEnemy, yEnemy, radius, startPoint, endPoint, colorEnemy, gravity, false);
+  arrayEnemies.push(newCharacterEnemy);
+  console.log(arrayEnemies);
+}, 3000);
 
 
 // Move function.
@@ -123,8 +134,25 @@ const newCharacterEnemy = new EnemyCharacter(xEnemy, yEnemy, radius, startPoint,
 function animateDraw() {
   requestAnimationFrame(animateDraw);
   canvasContext.clearRect(0, 0, canvasArea.width, canvasArea.height);
-  newCharacter.updatedAnimation();
-  newCharacterEnemy.updatedAnimation();
+  newCharacter.updatedAnimationMainChar();
+
+  arrayEnemies.forEach(element => {
+    element.updatedAnimationEnemy();
+    if (collisionDetection(newCharacter.xKey, newCharacter.yKey, element.xEnemyKey, element.yEnemyKey) < element.radiusKey + element.radiusKey) {
+      newCharacter.xRightVelocityKey = 0;
+      newCharacter.xLeftVelocityKey = 0;
+      element.gravityKey = 0;
+    }
+    if (element.yEnemyKey + element.radiusKey > window.innerHeight + element.radiusKey * 2) {
+      element.yEnemyKey = canvasArea.height - canvasArea.height - 100;
+    }
+  });
+}
+
+function collisionDetection (xMainChar, yMainChar, xEnemyChar, yEnemyChar) {
+  let xDistance = xEnemyChar - xMainChar;
+  let yDistance = yEnemyChar - yMainChar;
+  return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 }
 
 // Call the AnimatedDraw Function.
@@ -143,18 +171,14 @@ rightBtn.addEventListener('click', function (event) {
   newCharacter.colorKey = 'green';
 });
 
+
+// SetIntervals to check when character is not longer on Game Zone.
 setInterval(function () {
   if (newCharacter.xKey + newCharacter.radiusKey > window.innerWidth - newCharacter.radiusKey) {
     newCharacter.xRightVelocityKey = 0;
     newCharacter.xLeftVelocityKey = 5;
-  } else if (newCharacter.xKey - newCharacter.radiusKey < (window.innerWidth - window.innerWidth + newCharacter.radiusKey)) {
+  } else if (newCharacter.xKey - newCharacter.radiusKey < window.innerWidth - window.innerWidth + newCharacter.radiusKey) {
     newCharacter.xRightVelocityKey = 5;
     newCharacter.xLeftVelocityKey = 0;
-  }
-}, 50);
-
-setInterval(function () {
-  if (newCharacterEnemy.yKey + newCharacterEnemy.radiusKey > window.innerHeight + newCharacterEnemy.radiusKey) {
-    newCharacterEnemy.yKey = 0;
   }
 }, 50);
