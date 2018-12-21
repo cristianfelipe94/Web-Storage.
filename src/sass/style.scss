@@ -4,6 +4,11 @@ body {
   margin: 0;
   overflow: hidden;
   position: absolute;
+  font-family: 'Staatliches', cursive;
+}
+
+.hiddenInformation {
+  display: none;
 }
 
 
@@ -17,6 +22,7 @@ canvas {
 
 .btns {
   position: absolute;
+  font-family: 'Staatliches', cursive;
 }
 
 .btnL {
@@ -70,4 +76,55 @@ canvas {
   bottom: 100px;
   right: 0;
   left: 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.instructionsWrapper {
+  background-color: red;
+  margin: 0 auto;
+  position: absolute;
+  top: 10%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 1.2rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.lifeWrapper {
+  background-color: red;
+  margin: 0 auto;
+  position: absolute;
+  top: 35%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 1.2rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.heart {
+  width: 50px;
+}
+
+.loadingStartsState::after {
+  content: 'Loading';
+  animation: loadingState 3s infinite;
+}
+
+.loadingEndsState::after {
+  content: unset;
+}
+
+@keyframes loadingState {
+  50% {content: 'Loading.';}
+  75% {content: 'Loading..';}
+  100% {content: 'Loading...';}
 }

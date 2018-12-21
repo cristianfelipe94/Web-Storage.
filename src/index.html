@@ -5,13 +5,22 @@
   <meta name="viewport" content='width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=0'>
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/style.css">
-  <title>Javascript proyecto final.</title>
+  <link href="https://fonts.googleapis.com/css?family=Staatliches" rel="stylesheet">  <title>Javascript proyecto final.</title>
 </head>
 <body>
   <canvas id="canvasArea" class="contentOverlay"></canvas>
   <button class="btns btnL" id="leftBtn">L</button>
   <button class="btns btnR" id="rightBtn">R</button>
   <img src="assets/backgroundGame.png" alt="" class="backgroundImgGame">
+  <div class="instructionsWrapper" id="instructionsBox">
+    <p id="instructions">Las reglas son sencillas, durar la mayor cantidad de tiempo sin ser tocado por los enemigos. Al ser tocado por los enemigos el tamaño del personaje va a aumentar, ocacionando que sea más sencillo perder.</p>
+  </div>
+  <div class="lifeWrapper" id="lifeBox">
+    <p id="life">El personaje cuenta con 3 vidas, así que aprovéchalas!</p>
+    <img src="assets/heartSolid.svg" alt="" class="heart heartUp">
+    <img src="assets/heartSolid.svg" alt="" class="heart heartUp">
+    <img src="assets/heartBrokenSolid.svg" alt="" class="heart heartDown">  
+  </div>
   <div class="timerWrapper" id="timerBtn">
     <p id="timer"></p>
   </div>
