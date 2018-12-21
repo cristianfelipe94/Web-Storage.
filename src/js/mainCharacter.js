@@ -11,6 +11,7 @@ canvasArea.height = window.innerHeight + 20;
 
 let timerBtnState = false;
 let startSeconds = 0;
+let rotationLevelRotated = 10;
 timer.innerHTML = 'Start game';
 
 
@@ -129,25 +130,44 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
   };
 }
 
-
+// Created array where enemies will be stored.
 let arrayEnemies = [];
 
+// Function SetInterval.
+// This function will create enemies every given time.
+// Inside this function is the random value generator.
+// After generating random values for each element, function will push element into the Array.
+// Every given time function will increase time by one.
 setInterval(function (){
   const xEnemy = generateRandomValue(canvasArea.width);
   const gravity = generateRandomValue(gravityValue);
   const radiusEnemy = generateRandomValue(radiusValue);
   arrayEnemies.push(new EnemyCharacter(xEnemy, yEnemy, radiusEnemy, startPoint, endPoint, colorEnemy, gravity, false));
+  startSeconds += 1;
+  timer.innerHTML = startSeconds;
   console.log(arrayEnemies);
+  if (startSeconds === rotationLevelRotated) {
+    console.log('reached level');
+  }
 }, 5000);
 
 
 // Move function.
 // Function will create a Loop with the AnimationFrame.
 // Loop will Draw and will Clear all from the Canvas Field.
+// Loop is running every frame and will check for collisions.
 function animateDraw() {
   requestAnimationFrame(animateDraw);
   canvasContext.clearRect(0, 0, canvasArea.width, canvasArea.height);
   newCharacter.updatedAnimationMainChar();
+
+  if (newCharacter.xKey + newCharacter.radiusKey > window.innerWidth - newCharacter.radiusKey) {
+    newCharacter.xRightVelocityKey = 0;
+    newCharacter.xLeftVelocityKey = 5;
+  } else if (newCharacter.xKey - newCharacter.radiusKey < window.innerWidth - window.innerWidth + newCharacter.radiusKey) {
+    newCharacter.xRightVelocityKey = 5;
+    newCharacter.xLeftVelocityKey = 0;
+  }
 
   arrayEnemies.forEach(element => {
     element.updatedAnimationEnemy();
@@ -164,6 +184,7 @@ function animateDraw() {
   });
 }
 
+// Function for Collisions, has parameters.
 function collisionDetection (xMainChar, yMainChar, xEnemyChar, yEnemyChar) {
   let xDistance = xEnemyChar - xMainChar;
   let yDistance = yEnemyChar - yMainChar;
@@ -183,15 +204,3 @@ rightBtn.addEventListener('click', function (event) {
   newCharacter.xRightVelocityKey = 3;
   newCharacter.xLeftVelocityKey = 0;
 });
-
-
-// SetIntervals to check when character is not longer on Game Zone.
-setInterval(function () {
-  if (newCharacter.xKey + newCharacter.radiusKey > window.innerWidth - newCharacter.radiusKey) {
-    newCharacter.xRightVelocityKey = 0;
-    newCharacter.xLeftVelocityKey = 5;
-  } else if (newCharacter.xKey - newCharacter.radiusKey < window.innerWidth - window.innerWidth + newCharacter.radiusKey) {
-    newCharacter.xRightVelocityKey = 5;
-    newCharacter.xLeftVelocityKey = 0;
-  }
-}, 50);
