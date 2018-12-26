@@ -5,10 +5,15 @@ body {
   overflow: hidden;
   position: absolute;
   font-family: 'Staatliches', cursive;
+  user-select: none;
 }
 
 .hiddenInformation {
   display: none;
+}
+
+.showInformation {
+  display: inline-block;
 }
 
 
@@ -110,8 +115,89 @@ canvas {
   cursor: pointer;
 }
 
-.heart {
+.userlifeHiddenWrapper {
+  display: none;
+  margin: 0 auto;
+  position: absolute;
+  top: 0%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 1;
+  font-size: 1.2rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.userlifeShowingWrapper {
+  display: inline-block;
+  margin: 0 auto;
+  position: absolute;
+  top: 0%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 1;
+  font-size: 1.2rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.heartStats {
   width: 50px;
+  position: absolute;
+}
+
+.gameOverWrapper {
+  display: none;
+  background-color: red;
+  margin: 0 auto;
+  position: absolute;
+  top: 35%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 1.2rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.heartDemo {
+  width: 50px;
+}
+
+.heartGame {
+  width: 50px;
+  position: relative;
+  animation: floatMove 0.9s infinite;
+}
+
+@keyframes floatMove {
+  0% {
+    top: 6px;
+    opacity: 0.5;
+  }
+  16% {
+    bottom: 3px;
+  }
+  32% {
+    top: 4px;
+  }
+  48% {
+    bottom: 6px;
+    opacity: 1;
+  }
+  64% {
+    top: 3px;
+  }
+  80% {
+    bottom: 4px;
+  }
+  100% {
+    top: 6px;
+    opacity: 0.5;
+  }
 }
 
 .loadingStartsState::after {

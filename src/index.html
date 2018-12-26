@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content='width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=0'>
+  <meta name="viewport" content='width=device-width, initial-scale=0.6, maximum-scale=0.6, user-scalable=0'>
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css?family=Staatliches" rel="stylesheet">  <title>Javascript proyecto final.</title>
@@ -12,14 +12,22 @@
   <button class="btns btnL" id="leftBtn">L</button>
   <button class="btns btnR" id="rightBtn">R</button>
   <img src="assets/backgroundGame.png" alt="" class="backgroundImgGame">
+  <div class="userlifeHiddenWrapper" id="userLifeBox">
+    <img src="assets/heartSolid.svg" alt="" class="heartGame" id="firstHeart">
+    <img src="assets/heartSolid.svg" alt="" class="heartGame" id="secondHeart">
+    <img src="assets/heartSolid.svg" alt="" class="heartGame" id="thirdHeart">
+  </div>
   <div class="instructionsWrapper" id="instructionsBox">
     <p id="instructions">Las reglas son sencillas, durar la mayor cantidad de tiempo sin ser tocado por los enemigos. Al ser tocado por los enemigos el tamaño del personaje va a aumentar, ocacionando que sea más sencillo perder.</p>
   </div>
   <div class="lifeWrapper" id="lifeBox">
     <p id="life">El personaje cuenta con 3 vidas, así que aprovéchalas!</p>
-    <img src="assets/heartSolid.svg" alt="" class="heart heartUp">
-    <img src="assets/heartSolid.svg" alt="" class="heart heartUp">
-    <img src="assets/heartBrokenSolid.svg" alt="" class="heart heartDown">  
+    <img src="assets/heartSolid.svg" alt="" class="heartDemo heartUp">
+    <img src="assets/heartSolid.svg" alt="" class="heartDemo heartUp">
+    <img src="assets/heartBrokenSolid.svg" alt="" class="heartDemo heartDown">  
+  </div>
+  <div class="gameOverWrapper" id="gameOverBox">
+
   </div>
   <div class="timerWrapper" id="timerBtn">
     <p id="timer"></p>

@@ -6,16 +6,25 @@ const leftBtn = document.getElementById('leftBtn');
 const rightBtn = document.getElementById('rightBtn');
 const instructionsBox = document.getElementById('instructionsBox');
 const lifeBox = document.getElementById('lifeBox');
+const gameOverBox = document.getElementById('gameOverBox');
+const userLifeBox = document.getElementById('userLifeBox');
+const firstHeart = document.getElementById('firstHeart');
+const secondHeart = document.getElementById('secondHeart');
+const thirdHeart = document.getElementById('thirdHeart');
+const heartGame = document.querySelectorAll('heartGame');
+
 
 // Set the Canvas Width and Height as the Window.
 canvasArea.width = window.innerWidth;
 canvasArea.height = window.innerHeight + 20;
 
 // Global variables and global functions.
-let timerBtnState = false;
+let timerBtnState;
 let startSeconds = 0;
 let rotationLevelRotated = 10;
 timer.innerHTML = 'Start game';
+let statusLife = 0;
+const characterLife = 3;
 
 // Function for Collisions, has parameters.
 function collisionDetection (xMainChar, yMainChar, xEnemyChar, yEnemyChar) {
@@ -133,20 +142,23 @@ let arrayEnemies = [];
 // Inside this function is the random value generator.
 // After generating random values for each element, function will push element into the Array.
 // Every given time function will increase time by one.
-function initGenerateEnemies () {
-  setInterval(function (){
-    const xEnemy = generateRandomValue(canvasArea.width);
-    const gravity = generateRandomValue(gravityValue);
-    const radiusEnemy = generateRandomValue(radiusValue);
-    arrayEnemies.push(new EnemyCharacter(xEnemy, yEnemy, radiusEnemy, startPoint, endPoint, colorEnemy, gravity, false));
-    startSeconds += 1;
-    timer.innerHTML = startSeconds;
-    console.log(arrayEnemies);
-    if (startSeconds === rotationLevelRotated) {
-      console.log('reached level');
-    }
-  }, 5000);
-}
+let respawnedEnemies;
+function enemyGenerator () {
+  if (timerBtnState === true) {
+    respawnedEnemies = setInterval(function(){
+      const xEnemy = generateRandomValue(canvasArea.width);
+      const gravity = generateRandomValue(gravityValue);
+      const radiusEnemy = generateRandomValue(radiusValue);
+      arrayEnemies.push(new EnemyCharacter(xEnemy, yEnemy, radiusEnemy, startPoint, endPoint, colorEnemy, gravity, false));
+      startSeconds += 1;
+      timer.innerHTML = startSeconds;
+      console.log(arrayEnemies);
+      if (startSeconds === rotationLevelRotated) {
+        console.log('reached level');
+      }
+    }, 5000);
+  }
+};
 
 // Move function.
 // Function will create a Loop with the AnimationFrame.
@@ -182,13 +194,28 @@ function animateDraw() {
       element.gravityKey = 0;
       arrayEnemies.splice(element, 1);
       newCharacter.radiusKey += 5;
-    } else {
-      element.gravityKey = generateRandomValue(gravityValue);
+      statusLife += 1;
+    }
+    if (statusLife === 1) {
+      firstHeart.setAttribute('src', 'assets/heartBrokenRed.svg');
+    }
+    if (statusLife === 2) {
+      secondHeart.setAttribute('src', 'assets/heartBrokenRed.svg');
+    }
+    if (statusLife >= 3) {
+      thirdHeart.setAttribute('src', 'assets/heartBrokenRed.svg');
     }
     if (element.yEnemyKey + element.radiusKey > window.innerHeight + element.radiusKey * 2) {
       element.yEnemyKey = canvasArea.height - canvasArea.height - 100;
     }
   });
+  if (statusLife >= characterLife) {
+    arrayEnemies.forEach(element => {
+      element.gravityKey = 0;
+    });
+    timerBtnState = false;
+    clearInterval(respawnedEnemies);
+  }
 }
 
 // Call the AnimatedDraw Function.
@@ -196,16 +223,18 @@ animateDraw();
 
 // Function will init enemies generation and will start timer.
 timerBtn.addEventListener('click', function () {
+  userLifeBox.setAttribute('class','userlifeShowingWrapper');
   instructionsBox.setAttribute('class', 'hiddenInformation');
   lifeBox.setAttribute('class', 'hiddenInformation');
   timer.innerHTML = '';
   timer.setAttribute('class', 'loadingStartsState');
-  initGenerateEnemies();
+  timerBtnState = true;
+  enemyGenerator ();
   setInterval(function (){
     if (startSeconds > 0) {
       timer.setAttribute('class', 'loadingEndsState');
     }
-  }, 1000);
+  }, 500);
 });
 
 // Set the EventListeners to the Btns.
