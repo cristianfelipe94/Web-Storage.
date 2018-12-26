@@ -126,6 +126,7 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
   this.updatedAnimationEnemy = function () {
     this.yEnemyKey += this.gravityKey;
     this.drawAnimationEnemy();
+    this.collision();
   };
 
   // This Function will live inside the Object as part of it.
@@ -138,6 +139,18 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
     canvasContext.strokeStyle = this.colorEnemyKey;
     canvasContext.stroke();
   };
+
+  this.collision = function () {
+    if (collisionDetection(newCharacter.xKey, newCharacter.yKey, this.xEnemyKey, this.yEnemyKey) < newCharacter.radiusKey + this.radiusKey) {
+      this.gravityKey = 0;
+      let enemyIndexOf = arrayEnemies.indexOf(this);
+      arrayEnemies.splice(enemyIndexOf, 1);
+      newCharacter.radiusKey += 5;
+      statusLife += 1;
+      newCharacter.xRightVelocityKey = 0;
+      newCharacter.xLeftVelocityKey = 0;
+    }
+  }
 }
 
 // Created array where enemies will be stored.
@@ -152,6 +165,7 @@ let respawnedEnemies;
 function enemyGenerator () {
   if (timerBtnState === true) {
     respawnedEnemies = setInterval(function(){
+      console.log(arrayEnemies);
       const xEnemy = generateRandomValue(canvasArea.width);
       const gravity = generateRandomValue(gravityValue);
       const radiusEnemy = generateRandomValue(radiusValue);
@@ -198,9 +212,9 @@ function animateDraw() {
     secondHeart.setAttribute('class', 'heartGameAlmostDie');
     thirdHeart.setAttribute('class', 'heartGameAlmostDie');
     if (langChosen === 1) {
-      userScored.innerHTML = `Tu puntuación fue de: ${startSeconds} `;
+      userScored.innerHTML = `Sobreviviste: ${startSeconds} segundos.`;
     } else if (langChosen === 2) {
-      userScored.innerHTML = `You scored: ${startSeconds} `;
+      userScored.innerHTML = `You survived: ${startSeconds} seconds.`;
     }
     gameOverBox.setAttribute('class','gameOverShowingWrapper');
   }
@@ -209,25 +223,17 @@ function animateDraw() {
   // And it will check if there is any collision using CollisionDetection function that lifes outside main function.
   arrayEnemies.forEach(element => {
     element.updatedAnimationEnemy();
-    if (collisionDetection(newCharacter.xKey, newCharacter.yKey, element.xEnemyKey, element.yEnemyKey) < newCharacter.radiusKey + element.radiusKey) {
-      newCharacter.radiusKey += 5;
-      statusLife += 1;
-      newCharacter.xRightVelocityKey = 0;
-      newCharacter.xLeftVelocityKey = 0;
-      element.gravityKey = 0;
-      arrayEnemies.splice(element, 1);
-    }
     if (element.yEnemyKey + element.radiusKey > window.innerHeight + element.radiusKey * 2) {
       element.yEnemyKey = canvasArea.height - canvasArea.height - 100;
     }
   });
 
   if (statusLife >= characterLife) {
+    timerBtnState = false;
+    clearInterval(respawnedEnemies);
     arrayEnemies.forEach(element => {
       element.gravityKey = 0;
     });
-    timerBtnState = false;
-    clearInterval(respawnedEnemies);
   }
 }
 
@@ -290,4 +296,24 @@ englishFlagLang.addEventListener('click', function(){
   live.innerHTML = 'Your character has 3 lives, so take advantage of them!';
   timer.innerHTML = 'Start game';
   gameOver.innerHTML = 'Game over!';
+});
+
+gameOverBox.addEventListener('click', function () {
+  if (langChosen === 1) {
+    timer.innerHTML = '';
+    timer.innerHTML = 'Cargando';
+    timer.setAttribute('class', 'cargandoIniciaEstado');
+    setInterval(function (){
+      timer.setAttribute('class', 'cargandoFinEstado');
+      location.reload();
+    }, 5000);
+  } else if (langChosen === 2) {
+    timer.innerHTML = '';
+    timer.innerHTML = 'Loading';
+    timer.setAttribute('class', 'loadingStartsState');
+    setInterval(function (){
+      timer.setAttribute('class', 'loadingEndsState');
+      location.reload();
+    }, 5000);
+  }
 });
