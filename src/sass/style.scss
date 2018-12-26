@@ -20,11 +20,12 @@ body {
 // Canvas field.
 ////////////////
 canvas {
-  border: 2px solid black;
   min-width: 320px;
   position: absolute;
 }
 
+// Btns.
+/////////
 .btns {
   position: absolute;
   font-family: 'Staatliches', cursive;
@@ -62,6 +63,8 @@ canvas {
   }
 }
 
+// Background image.
+////////////////////
 .backgroundImgGame {
   width: 100vw;
   height: 100vh;
@@ -98,7 +101,6 @@ canvas {
   opacity: 0.8;
   font-size: 1.2rem;
   padding: 10px;
-  cursor: pointer;
 }
 
 .lifeWrapper {
@@ -112,9 +114,14 @@ canvas {
   opacity: 0.8;
   font-size: 1.2rem;
   padding: 10px;
-  cursor: pointer;
 }
 
+.userScoredWrapper {
+  display: block;
+}
+
+// Hidden and showed boxes.
+////////////////////////////
 .userlifeHiddenWrapper {
   display: none;
   margin: 0 auto;
@@ -126,7 +133,6 @@ canvas {
   opacity: 1;
   font-size: 1.2rem;
   padding: 10px;
-  cursor: pointer;
 }
 
 .userlifeShowingWrapper {
@@ -143,13 +149,22 @@ canvas {
   cursor: pointer;
 }
 
-.heartStats {
-  width: 50px;
+.gameOverHiddenWrapper {
+  display: none;
+  background-color: red;
+  margin: 0 auto;
   position: absolute;
+  top: 35%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 1.2rem;
+  padding: 10px;
 }
 
-.gameOverWrapper {
-  display: none;
+.gameOverShowingWrapper {
+  display: inline-block;
   background-color: red;
   margin: 0 auto;
   position: absolute;
@@ -163,14 +178,63 @@ canvas {
   cursor: pointer;
 }
 
+// Hearts from instructions.
+////////////////////////////
 .heartDemo {
   width: 50px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
+.langShowingWrapper {
+  display: inline-block;
+  margin: 0 auto;
+  position: absolute;
+  top: 0%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  padding: 10px;
+}
+
+.langHiddenWrapper {
+  display: none;
+  margin: 0 auto;
+  position: absolute;
+  top: 0%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  padding: 10px;
+}
+
+.flag {
+  width: 50px;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Hearts from game.
+////////////////////
 .heartGame {
   width: 50px;
   position: relative;
   animation: floatMove 0.9s infinite;
+}
+.heartGameHit {
+  width: 50px;
+  position: relative;
+  animation: floatMove 0.7s infinite;
+}
+.heartGameAlmostDie {
+  width: 50px;
+  position: relative;
+  animation: floatMove 0.5s infinite;
 }
 
 @keyframes floatMove {
@@ -200,6 +264,8 @@ canvas {
   }
 }
 
+// Loading animation.
+/////////////////////
 .loadingStartsState::after {
   content: 'Loading';
   animation: loadingState 3s infinite;
@@ -213,4 +279,19 @@ canvas {
   50% {content: 'Loading.';}
   75% {content: 'Loading..';}
   100% {content: 'Loading...';}
+}
+
+.cargandoIniciaEstado::after {
+  content: 'Cargando';
+  animation: cargandoEstado 3s infinite;
+}
+
+.cargandoFinEstado::after {
+  content: unset;
+}
+
+@keyframes cargandoEstado {
+  50% {content: 'Cargando.';}
+  75% {content: 'Cargando..';}
+  100% {content: 'Cargando...';}
 }

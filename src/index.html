@@ -9,9 +9,13 @@
 </head>
 <body>
   <canvas id="canvasArea" class="contentOverlay"></canvas>
-  <button class="btns btnL" id="leftBtn">L</button>
-  <button class="btns btnR" id="rightBtn">R</button>
+  <button class="btns btnL" id="leftBtn">I</button>
+  <button class="btns btnR" id="rightBtn">D</button>
   <img src="assets/backgroundGame.png" alt="" class="backgroundImgGame">
+  <div class="langShowingWrapper" id="langBox">
+    <img src="assets/español.svg" alt="" class="flag" id="españolFlagLang">
+    <img src="assets/english.svg" alt="" class="flag" id="englishFlagLang">
+  </div>
   <div class="userlifeHiddenWrapper" id="userLifeBox">
     <img src="assets/heartSolid.svg" alt="" class="heartGame" id="firstHeart">
     <img src="assets/heartSolid.svg" alt="" class="heartGame" id="secondHeart">
@@ -21,13 +25,14 @@
     <p id="instructions">Las reglas son sencillas, durar la mayor cantidad de tiempo sin ser tocado por los enemigos. Al ser tocado por los enemigos el tamaño del personaje va a aumentar, ocacionando que sea más sencillo perder.</p>
   </div>
   <div class="lifeWrapper" id="lifeBox">
-    <p id="life">El personaje cuenta con 3 vidas, así que aprovéchalas!</p>
+    <p id="live">Tu personaje cuenta con 3 vidas, así que aprovéchalas!</p>
     <img src="assets/heartSolid.svg" alt="" class="heartDemo heartUp">
     <img src="assets/heartSolid.svg" alt="" class="heartDemo heartUp">
     <img src="assets/heartBrokenSolid.svg" alt="" class="heartDemo heartDown">  
   </div>
-  <div class="gameOverWrapper" id="gameOverBox">
-
+  <div class="gameOverHiddenWrapper" id="gameOverBox">
+    <p id="gameOver">Perdiste!</p>
+    <p id="userScored" class="userScoredWrapper"></p>
   </div>
   <div class="timerWrapper" id="timerBtn">
     <p id="timer"></p>

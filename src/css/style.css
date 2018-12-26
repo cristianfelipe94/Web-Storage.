@@ -12,7 +12,6 @@ body {
   display: inline-block; }
 
 canvas {
-  border: 2px solid black;
   min-width: 320px;
   position: absolute; }
 
@@ -81,8 +80,7 @@ canvas {
   text-align: center;
   opacity: 0.8;
   font-size: 1.2rem;
-  padding: 10px;
-  cursor: pointer; }
+  padding: 10px; }
 
 .lifeWrapper {
   background-color: red;
@@ -94,8 +92,10 @@ canvas {
   text-align: center;
   opacity: 0.8;
   font-size: 1.2rem;
-  padding: 10px;
-  cursor: pointer; }
+  padding: 10px; }
+
+.userScoredWrapper {
+  display: block; }
 
 .userlifeHiddenWrapper {
   display: none;
@@ -107,8 +107,7 @@ canvas {
   text-align: center;
   opacity: 1;
   font-size: 1.2rem;
-  padding: 10px;
-  cursor: pointer; }
+  padding: 10px; }
 
 .userlifeShowingWrapper {
   display: inline-block;
@@ -123,12 +122,21 @@ canvas {
   padding: 10px;
   cursor: pointer; }
 
-.heartStats {
-  width: 50px;
-  position: absolute; }
-
-.gameOverWrapper {
+.gameOverHiddenWrapper {
   display: none;
+  background-color: red;
+  margin: 0 auto;
+  position: absolute;
+  top: 35%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 1.2rem;
+  padding: 10px; }
+
+.gameOverShowingWrapper {
+  display: inline-block;
   background-color: red;
   margin: 0 auto;
   position: absolute;
@@ -142,12 +150,52 @@ canvas {
   cursor: pointer; }
 
 .heartDemo {
-  width: 50px; }
+  width: 50px;
+  cursor: pointer; }
+  .heartDemo:hover {
+    opacity: 0.8; }
+
+.langShowingWrapper {
+  display: inline-block;
+  margin: 0 auto;
+  position: absolute;
+  top: 0%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  padding: 10px; }
+
+.langHiddenWrapper {
+  display: none;
+  margin: 0 auto;
+  position: absolute;
+  top: 0%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  padding: 10px; }
+
+.flag {
+  width: 50px;
+  position: relative;
+  cursor: pointer; }
+  .flag:hover {
+    opacity: 0.8; }
 
 .heartGame {
   width: 50px;
   position: relative;
   animation: floatMove 0.9s infinite; }
+
+.heartGameHit {
+  width: 50px;
+  position: relative;
+  animation: floatMove 0.7s infinite; }
+
+.heartGameAlmostDie {
+  width: 50px;
+  position: relative;
+  animation: floatMove 0.5s infinite; }
 
 @keyframes floatMove {
   0% {
@@ -181,5 +229,19 @@ canvas {
     content: 'Loading..'; }
   100% {
     content: 'Loading...'; } }
+.cargandoIniciaEstado::after {
+  content: 'Cargando';
+  animation: cargandoEstado 3s infinite; }
+
+.cargandoFinEstado::after {
+  content: unset; }
+
+@keyframes cargandoEstado {
+  50% {
+    content: 'Cargando.'; }
+  75% {
+    content: 'Cargando..'; }
+  100% {
+    content: 'Cargando...'; } }
 
 /*# sourceMappingURL=style.css.map */
