@@ -127,7 +127,7 @@ canvas {
   background-color: red;
   margin: 0 auto;
   position: absolute;
-  top: 35%;
+  top: 25%;
   right: 0;
   left: 0;
   text-align: center;
@@ -140,7 +140,7 @@ canvas {
   background-color: red;
   margin: 0 auto;
   position: absolute;
-  top: 35%;
+  top: 25%;
   right: 0;
   left: 0;
   text-align: center;
@@ -243,5 +243,19 @@ canvas {
     content: 'Cargando..'; }
   100% {
     content: 'Cargando...'; } }
+.reiniciandoIniciaEstado::before {
+  content: 'Reiniciando';
+  animation: reiniciandoEstado 3s infinite; }
+
+.reiniciandoFinEstado::before {
+  content: unset; }
+
+@keyframes reiniciandoEstado {
+  50% {
+    content: 'Reiniciando.'; }
+  75% {
+    content: 'Reiniciando..'; }
+  100% {
+    content: 'Reiniciando...'; } }
 
 /*# sourceMappingURL=style.css.map */

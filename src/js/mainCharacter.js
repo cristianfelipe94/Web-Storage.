@@ -19,6 +19,7 @@ const heartGame = document.querySelectorAll('heartGame');
 const langBox = document.getElementById('langBox');
 const españolFlagLang = document.getElementById('españolFlagLang');
 const englishFlagLang = document.getElementById('englishFlagLang');
+const playAgain = document.getElementById('playAgain');
 
 // Set the Canvas Width and Height as the Window.
 canvasArea.width = window.innerWidth;
@@ -172,7 +173,7 @@ function enemyGenerator () {
       arrayEnemies.push(new EnemyCharacter(xEnemy, yEnemy, radiusEnemy, startPoint, endPoint, colorEnemy, gravity, false));
       startSeconds += 1;
       timer.innerHTML = startSeconds;
-    }, 5000);
+    }, 3000);
   }
 };
 
@@ -213,8 +214,10 @@ function animateDraw() {
     thirdHeart.setAttribute('class', 'heartGameAlmostDie');
     if (langChosen === 1) {
       userScored.innerHTML = `Sobreviviste: ${startSeconds} segundos.`;
+      playAgain.innerHTML = 'Toca acá para volver a jugar!';
     } else if (langChosen === 2) {
       userScored.innerHTML = `You survived: ${startSeconds} seconds.`;
+      playAgain.innerHTML = 'Click here to try again!';
     }
     gameOverBox.setAttribute('class','gameOverShowingWrapper');
   }
@@ -301,19 +304,15 @@ englishFlagLang.addEventListener('click', function(){
 gameOverBox.addEventListener('click', function () {
   if (langChosen === 1) {
     timer.innerHTML = '';
-    timer.innerHTML = 'Cargando';
-    timer.setAttribute('class', 'cargandoIniciaEstado');
+    timer.innerHTML = 'Reiniciando.';
     setInterval(function (){
-      timer.setAttribute('class', 'cargandoFinEstado');
       location.reload();
-    }, 5000);
+    }, 3000);
   } else if (langChosen === 2) {
     timer.innerHTML = '';
-    timer.innerHTML = 'Loading';
-    timer.setAttribute('class', 'loadingStartsState');
+    timer.innerHTML = 'Starting.';
     setInterval(function (){
-      timer.setAttribute('class', 'loadingEndsState');
       location.reload();
-    }, 5000);
+    }, 3000);
   }
 });
