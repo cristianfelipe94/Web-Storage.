@@ -23,7 +23,7 @@ const playAgain = document.getElementById('playAgain');
 
 // Set the Canvas Width and Height as the Window.
 canvasArea.width = window.innerWidth;
-canvasArea.height = window.innerHeight + 20;
+canvasArea.height = window.innerHeight;
 
 // Global variables and global functions.
 let timerBtnState;
@@ -101,16 +101,6 @@ function MainCharacter(xKey, yKey, radiusKey, startPointKey, endPointKey, xLeftV
 // Create an Element that will get all the Parameters and Characteristics from the Main Object.
 const newCharacter = new MainCharacter(x, y, radius, startPoint, endPoint, xLeftVelocity, xRightVelocity, color, false);
 
-// Enemy Character.
-// Variables for the Enemy Character.
-const yEnemy = canvasArea.height;
-const colorEnemy = 'blue';
-const gravityValue = 6;
-const radiusValue = 30;
-const xEnemy = generateRandomValue(canvasArea.width);
-const gravity = generateRandomValue(gravityValue);
-const radiusEnemy = generateRandomValue(radiusValue);
-
 // Main Character, this Character is an object with 'Caracteristics' or 'Parameters'
 // The Parameters will be saved on its respective 'Key' or 'Variable'.
 function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPointKey, colorEnemyKey, gravityKey) {
@@ -133,7 +123,7 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
   // This Function will live inside the Object as part of it.
   this.drawAnimationEnemy = function () {
     canvasContext.beginPath();
-    canvasContext.arc(this.xEnemyKey, this.yEnemyKey, this.radiusKey, this.startPointKey, this.endPointKey, this.colorEnemyKey, gravityKey, false);
+    canvasContext.arc(this.xEnemyKey, this.yEnemyKey, this.radiusKey, this.startPointKey, this.endPointKey, this.colorEnemyKey, this.gravityKey, false);
     canvasContext.fillStyle = 'black';
     canvasContext.fill();
     canvasContext.lineWidth = 1;
@@ -154,6 +144,7 @@ function EnemyCharacter(xEnemyKey, yEnemyKey, radiusKey, startPointKey, endPoint
   }
 }
 
+
 // Created array where enemies will be stored.
 let arrayEnemies = [];
 
@@ -166,7 +157,12 @@ let respawnedEnemies;
 function enemyGenerator () {
   if (timerBtnState === true) {
     respawnedEnemies = setInterval(function(){
-      console.log(arrayEnemies);
+      // Enemy Character.
+      // Variables for the Enemy Character.
+      const yEnemy = canvasArea.height - canvasArea.height - 200;
+      const colorEnemy = 'blue';
+      const gravityValue = 6;
+      const radiusValue = 30;
       const xEnemy = generateRandomValue(canvasArea.width);
       const gravity = generateRandomValue(gravityValue);
       const radiusEnemy = generateRandomValue(radiusValue);
@@ -176,6 +172,56 @@ function enemyGenerator () {
     }, 3000);
   }
 };
+
+function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKey, colorPowerKey, gravityKey) {
+  this.xPowerUpKey = xPowerUpKey;
+  this.yPowerUpKey = yPowerUpKey;
+  this.radiusKey = radiusKey;
+  this.startPointKey = startPointKey;
+  this.endPointKey = endPointKey;
+  this.colorPowerKey = colorPowerKey;
+  this.gravityKey = gravityKey;
+
+  this.updatedAnimationPowerUp = function () {
+    this.yPowerUpKey += this.gravityKey;
+    this.drawAnimationPowerUp ();
+    this.collision ();
+  };
+
+  this.drawAnimationPowerUp = function () {
+    canvasContext.beginPath();
+    canvasContext.arc(this.xPowerUpKey, this.yPowerUpKey, this.radiusKey, this.startPointKey, this.endPointKey, this.colorPowerKey, this.gravityKey, false);
+    canvasContext.fillStyle = 'white';
+    canvasContext.fill();
+    canvasContext.lineWidth = 1;
+    canvasContext.strokeStyle = this.colorPowerKey;
+    canvasContext.stroke();
+  }
+
+  this.collision = function () {
+    if (collisionDetection(newCharacter.xKey, newCharacter.yKey, this.xPowerUpKey, this.yPowerUpKey) < newCharacter.radiusKey + this.radiusKey) {
+      this.gravityKey = 0;
+      let powerUpIndexof = arrayPowersUps.indexOf(this);
+      arrayPowersUps.splice(powerUpIndexof, 1);
+    }
+  }
+}
+
+let arrayPowersUps = [];
+let respawnedPowerUps;
+function powerUpsGenerator () {
+  if (timerBtnState === true) {
+    respawnedPowerUps = setInterval(function (){
+      console.log(arrayPowersUps);
+      const yPowerUp = canvasArea.height - canvasArea.height - 200;
+      const colorPowerUp = 'black';
+      const gravityPowerUpValue = 1.5;
+      const radiusPowerUpValue = 25;
+      const xPowerUp = generateRandomValue(canvasArea.width);
+      arrayPowersUps.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, false));
+    }, 5000);
+  }
+}
 
 // Move function.
 // Function will create a Loop with the AnimationFrame.
@@ -226,15 +272,28 @@ function animateDraw() {
   // And it will check if there is any collision using CollisionDetection function that lifes outside main function.
   arrayEnemies.forEach(element => {
     element.updatedAnimationEnemy();
-    if (element.yEnemyKey + element.radiusKey > window.innerHeight + element.radiusKey * 2) {
-      element.yEnemyKey = canvasArea.height - canvasArea.height - 100;
+    if (element.yEnemyKey + element.radiusKey > canvasArea.height + element.radiusKey + 200) {
+      element.yEnemyKey = canvasArea.height - canvasArea.height - 200;
+    }
+  });
+
+  arrayPowersUps.forEach(element => {
+    element.updatedAnimationPowerUp();
+    let powerUpIndexof = arrayPowersUps.indexOf(element);
+    if (element.yPowerUpKey + element.radiusPowerUpValue > canvasArea.height + element.radiusPowerUpValue + 200) {
+      arrayPowersUps.splice(powerUpIndexof, 1);
+      console.log(arrayPowersUps);
     }
   });
 
   if (statusLife >= characterLife) {
     timerBtnState = false;
+    clearInterval(respawnedPowerUps);
     clearInterval(respawnedEnemies);
     arrayEnemies.forEach(element => {
+      element.gravityKey = 0;
+    });
+    arrayPowersUps.forEach(element => {
       element.gravityKey = 0;
     });
   }
@@ -267,6 +326,7 @@ timerBtn.addEventListener('click', function () {
   }
   timerBtnState = true;
   enemyGenerator ();
+  powerUpsGenerator ();
   
 });
 
@@ -285,7 +345,7 @@ españolFlagLang.addEventListener('click', function(){
   langChosen = 1;
   leftBtn.innerHTML = 'I';
   rightBtn.innerHTML = 'D';
-  instructions.innerHTML = 'Las reglas son sencillas, durar la mayor cantidad de tiempo sin ser tocado por los enemigos. Al ser tocado por los enemigos el tamaño del personaje va a aumentar, ocacionando que sea más sencillo perder.';
+  instructions.innerHTML = 'Las reglas son sencillas, durar la mayor cantidad de tiempo sin ser tocado por los enemigos. Al ser tocado por los enemigos el tamaño del personaje va a aumentar, ocasionando que sea más sencillo perder.';
   live.innerHTML = 'Tu personaje cuenta con 3 vidas, así que aprovéchalas!';
   timer.innerHTML = 'Iniciar';
   gameOver.innerHTML = 'Perdiste!';
