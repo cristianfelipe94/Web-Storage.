@@ -173,7 +173,7 @@ function enemyGenerator () {
   }
 };
 
-function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKey, colorPowerKey, gravityKey) {
+function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKey, colorPowerKey, gravityKey, powerUpNameKey) {
   this.xPowerUpKey = xPowerUpKey;
   this.yPowerUpKey = yPowerUpKey;
   this.radiusKey = radiusKey;
@@ -181,6 +181,7 @@ function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKe
   this.endPointKey = endPointKey;
   this.colorPowerKey = colorPowerKey;
   this.gravityKey = gravityKey;
+  this.powerUpNameKey = powerUpNameKey;
 
   this.updatedAnimationPowerUp = function () {
     this.yPowerUpKey += this.gravityKey;
@@ -201,27 +202,55 @@ function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKe
   this.collision = function () {
     if (collisionDetection(newCharacter.xKey, newCharacter.yKey, this.xPowerUpKey, this.yPowerUpKey) < newCharacter.radiusKey + this.radiusKey) {
       this.gravityKey = 0;
-      let powerUpIndexof = arrayPowersUps.indexOf(this);
-      arrayPowersUps.splice(powerUpIndexof, 1);
+      if (this.powerUpNameKey === 'powerUpLife') {
+        statusLife -= 1;
+        newCharacter.radiusKey -= 5;
+        let powerUpIndexof = arrayLifePowersUp.indexOf(this);
+        arrayLifePowersUp.splice(powerUpIndexof, 1);
+      } else if (this.powerUpNameKey === 'powerUpBoom') {
+        let enemyIndexOf = arrayEnemies.length;
+        arrayEnemies.splice(0 ,enemyIndexOf);
+        let powerUpIndexof = arrayBoomPowersUp.indexOf(this);
+        arrayBoomPowersUp.splice(powerUpIndexof, 1);
+      }
     }
   }
 }
 
-let arrayPowersUps = [];
-let respawnedPowerUps;
-function powerUpsGenerator () {
+let arrayLifePowersUp = [];
+let respawnedLifePowerUp;
+function powerUpsLifeGenerator () {
   if (timerBtnState === true) {
-    respawnedPowerUps = setInterval(function (){
-      console.log(arrayPowersUps);
+    respawnedLifePowerUp = setInterval(function (){
       const yPowerUp = canvasArea.height - canvasArea.height - 200;
       const colorPowerUp = 'black';
       const gravityPowerUpValue = 1.5;
       const radiusPowerUpValue = 25;
+      let powerUpName = 'powerUpLife';
+      console.log('Life was generated.')
       const xPowerUp = generateRandomValue(canvasArea.width);
-      arrayPowersUps.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, false));
-    }, 5000);
+      arrayLifePowersUp.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, powerUpName,false));
+    }, 30000);
   }
 }
+
+let arrayBoomPowersUp = [];
+let respawnedBoomPowerUp;
+function powerUpsBoomGenerator () {
+  if (timerBtnState === true) {
+    respawnedBoomPowerUp = setInterval(function (){
+      const yPowerUp = canvasArea.height - canvasArea.height - 200;
+      const colorPowerUp = 'red';
+      const gravityPowerUpValue = 1.5;
+      const radiusPowerUpValue = 25;
+      let powerUpName = 'powerUpBoom';
+      console.log('Boom was generated.')
+      const xPowerUp = generateRandomValue(canvasArea.width);
+      arrayBoomPowersUp.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, powerUpName,false));
+    }, 60000);
+  }
+}
+
 
 // Move function.
 // Function will create a Loop with the AnimationFrame.
@@ -246,13 +275,27 @@ function animateDraw() {
     newCharacter.xRightVelocityKey = 6;
     newCharacter.xLeftVelocityKey = 0;
   }
-
-  if (statusLife === 1) {
+  if (statusLife === 0) {
+    firstHeart.setAttribute('src', 'assets/heartSolid.svg');
+    secondHeart.setAttribute('src', 'assets/heartSolid.svg');
+    thirdHeart.setAttribute('src', 'assets/heartSolid.svg');
+    firstHeart.setAttribute('class', 'heartGame');
+    secondHeart.setAttribute('class', 'heartGame');
+    thirdHeart.setAttribute('class', 'heartGame');
+  } else if (statusLife === 1) {
     firstHeart.setAttribute('src', 'assets/heartBrokenRed.svg');
+    secondHeart.setAttribute('src', 'assets/heartSolid.svg');
+    thirdHeart.setAttribute('src', 'assets/heartSolid.svg');
     firstHeart.setAttribute('class', 'heartGameHit');
+    secondHeart.setAttribute('class', 'heartGame');
+    thirdHeart.setAttribute('class', 'heartGame');
   } else if (statusLife === 2) {
+    firstHeart.setAttribute('src', 'assets/heartBrokenRed.svg');
     secondHeart.setAttribute('src', 'assets/heartBrokenRed.svg');
+    thirdHeart.setAttribute('src', 'assets/heartSolid.svg');
+    firstHeart.setAttribute('class', 'heartGameHit');
     secondHeart.setAttribute('class', 'heartGameHit');
+    thirdHeart.setAttribute('class', 'heartGame');
   } else if (statusLife >= 3) {
     thirdHeart.setAttribute('src', 'assets/heartBrokenRed.svg');
     firstHeart.setAttribute('class', 'heartGameAlmostDie');
@@ -277,23 +320,35 @@ function animateDraw() {
     }
   });
 
-  arrayPowersUps.forEach(element => {
+  arrayLifePowersUp.forEach(element => {
     element.updatedAnimationPowerUp();
-    let powerUpIndexof = arrayPowersUps.indexOf(element);
+    let powerUpIndexof = arrayLifePowersUp.indexOf(element);
     if (element.yPowerUpKey + element.radiusPowerUpValue > canvasArea.height + element.radiusPowerUpValue + 200) {
-      arrayPowersUps.splice(powerUpIndexof, 1);
-      console.log(arrayPowersUps);
+      arrayLifePowersUp.splice(powerUpIndexof, 1);
+      console.log('Life is out.');
+    }
+  });
+
+  arrayBoomPowersUp.forEach(element => {
+    element.updatedAnimationPowerUp();
+    let powerUpIndexof = arrayBoomPowersUp.indexOf(element);
+    if (element.yPowerUpKey + element.radiusPowerUpValue > canvasArea.height + element.radiusPowerUpValue + 200) {
+      arrayBoomPowersUp.splice(powerUpIndexof, 1);
+      console.log('Boom is out.');
     }
   });
 
   if (statusLife >= characterLife) {
     timerBtnState = false;
-    clearInterval(respawnedPowerUps);
-    clearInterval(respawnedEnemies);
+    clearInterval(respawnedLifePowerUp);
+    clearInterval(respawnedBoomPowerUp);
     arrayEnemies.forEach(element => {
       element.gravityKey = 0;
     });
-    arrayPowersUps.forEach(element => {
+    arrayLifePowersUp.forEach(element => {
+      element.gravityKey = 0;
+    });
+    arrayBoomPowersUp.forEach(element => {
       element.gravityKey = 0;
     });
   }
@@ -326,7 +381,8 @@ timerBtn.addEventListener('click', function () {
   }
   timerBtnState = true;
   enemyGenerator ();
-  powerUpsGenerator ();
+  powerUpsLifeGenerator ();
+  powerUpsBoomGenerator ();
   
 });
 
