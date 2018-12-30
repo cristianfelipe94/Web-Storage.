@@ -62,7 +62,21 @@ canvas {
   width: 100px;
   margin: 0 auto;
   position: absolute;
-  bottom: 100px;
+  bottom: 20%;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 1.2rem;
+  cursor: pointer; }
+
+.timerWrapperOnGame {
+  background-color: red;
+  height: 50px;
+  width: 100px;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 90%;
   right: 0;
   left: 0;
   text-align: center;

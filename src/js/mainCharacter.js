@@ -46,8 +46,16 @@ function generateRandomValue (maxValue) {
   let maxNumb = maxValue;
   let randomNumb = parseInt(Math.random() * maxNumb);
   if (randomNumb < 3) {
-    randomNumb += 3
+    randomNumb = 3
   }
+  return randomNumb;
+}
+
+// Function will generate random values.
+// Use as Parameter a MaxValue.
+function generateRandomValuePowerUps (maxValue) {
+  let maxNumb = maxValue;
+  let randomNumb = parseInt(Math.random() * maxNumb);
   return randomNumb;
 }
 
@@ -173,7 +181,7 @@ function enemyGenerator () {
   }
 };
 
-function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKey, colorPowerKey, gravityKey, powerUpNameKey) {
+function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKey, colorPowerKey, gravityKey, powerUpNameKey, levelPowerGeneratedKey) {
   this.xPowerUpKey = xPowerUpKey;
   this.yPowerUpKey = yPowerUpKey;
   this.radiusKey = radiusKey;
@@ -182,6 +190,7 @@ function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKe
   this.colorPowerKey = colorPowerKey;
   this.gravityKey = gravityKey;
   this.powerUpNameKey = powerUpNameKey;
+  this.levelPowerGeneratedKey = levelPowerGeneratedKey;
 
   this.updatedAnimationPowerUp = function () {
     this.yPowerUpKey += this.gravityKey;
@@ -192,7 +201,13 @@ function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKe
   this.drawAnimationPowerUp = function () {
     canvasContext.beginPath();
     canvasContext.arc(this.xPowerUpKey, this.yPowerUpKey, this.radiusKey, this.startPointKey, this.endPointKey, this.colorPowerKey, this.gravityKey, false);
-    canvasContext.fillStyle = 'white';
+    if (this.levelPowerGeneratedKey === 'firstLevelPowerUp') {
+      canvasContext.fillStyle = 'gray';
+    } else if (this.levelPowerGeneratedKey === 'secondLevelPowerUp') {
+      canvasContext.fillStyle = 'lightBlue';
+    } else if (this.levelPowerGeneratedKey === 'thirdLevelPowerUp') {
+      canvasContext.fillStyle = 'pink';
+    }
     canvasContext.fill();
     canvasContext.lineWidth = 1;
     canvasContext.strokeStyle = this.colorPowerKey;
@@ -203,15 +218,58 @@ function powerUp (xPowerUpKey, yPowerUpKey, radiusKey, startPointKey, endPointKe
     if (collisionDetection(newCharacter.xKey, newCharacter.yKey, this.xPowerUpKey, this.yPowerUpKey) < newCharacter.radiusKey + this.radiusKey) {
       this.gravityKey = 0;
       if (this.powerUpNameKey === 'powerUpLife') {
+        console.log('grapped life.')
         statusLife -= 1;
         newCharacter.radiusKey -= 5;
         let powerUpIndexof = arrayLifePowersUp.indexOf(this);
         arrayLifePowersUp.splice(powerUpIndexof, 1);
       } else if (this.powerUpNameKey === 'powerUpBoom') {
+        console.log('grapped boom.')
         let enemyIndexOf = arrayEnemies.length;
         arrayEnemies.splice(0 ,enemyIndexOf);
         let powerUpIndexof = arrayBoomPowersUp.indexOf(this);
         arrayBoomPowersUp.splice(powerUpIndexof, 1);
+      } else if (this.powerUpNameKey === 'speedUpPower') {
+        console.log('grapped speed.')
+        // Set the EventListeners to the Btns.
+        leftBtn.addEventListener('click', function () {
+          newCharacter.xRightVelocityKey = 0;
+          newCharacter.xLeftVelocityKey = 5;
+        });
+
+        rightBtn.addEventListener('click', function () {
+          newCharacter.xRightVelocityKey = 5;
+          newCharacter.xLeftVelocityKey = 0;
+        });
+        let powerUpIndexof = arrayPowersUp.indexOf(this);
+        arrayPowersUp.splice(powerUpIndexof, 1);
+      } else if (this.powerUpNameKey === 'smallerPower') {
+        console.log('grapped small size.')
+        newCharacter.radiusKey -= 10;
+        let powerUpIndexof = arrayPowersUp.indexOf(this);
+        arrayPowersUp.splice(powerUpIndexof, 1);
+      } else if (this.powerUpNameKey === 'switchPower') {
+        console.log('grapped switch.')
+        // Set the EventListeners to the Btns.
+        rightBtn.addEventListener('click', function () {
+          newCharacter.xRightVelocityKey = 0;
+          newCharacter.xLeftVelocityKey = 3;
+        });
+
+        leftBtn.addEventListener('click', function () {
+          newCharacter.xRightVelocityKey = 3;
+          newCharacter.xLeftVelocityKey = 0;
+        });
+        let powerUpIndexof = arrayPowersUp.indexOf(this);
+        arrayPowersUp.splice(powerUpIndexof, 1);
+      } else if (this.powerUpNameKey === 'slowPower') {
+        console.log('grapped slow-mo.')
+        arrayEnemies.forEach(element => {
+          element.gravityKey = 1;
+          element.updatedAnimationEnemy();
+        });
+        let powerUpIndexof = arrayPowersUp.indexOf(this);
+        arrayPowersUp.splice(powerUpIndexof, 1);
       }
     }
   }
@@ -226,11 +284,11 @@ function powerUpsLifeGenerator () {
       const colorPowerUp = 'black';
       const gravityPowerUpValue = 1.5;
       const radiusPowerUpValue = 25;
+      levelPowerGenerated = 'secondLevelPowerUp';
       let powerUpName = 'powerUpLife';
-      console.log('Life was generated.')
       const xPowerUp = generateRandomValue(canvasArea.width);
-      arrayLifePowersUp.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, powerUpName,false));
-    }, 30000);
+      arrayLifePowersUp.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, powerUpName, levelPowerGenerated,false));
+    }, 35000);
   }
 }
 
@@ -243,15 +301,49 @@ function powerUpsBoomGenerator () {
       const colorPowerUp = 'red';
       const gravityPowerUpValue = 1.5;
       const radiusPowerUpValue = 25;
+      levelPowerGenerated = 'thirdLevelPowerUp';
       let powerUpName = 'powerUpBoom';
-      console.log('Boom was generated.')
       const xPowerUp = generateRandomValue(canvasArea.width);
-      arrayBoomPowersUp.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, powerUpName,false));
+      arrayBoomPowersUp.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, powerUpName, levelPowerGenerated,false));
     }, 60000);
   }
 }
 
+let arrayPowersUp = [];
+let arrayPowerUpsList = [
+  'speedUpPower',
+  'smallerPower',
+  'switchPower',
+  'slowPower'
+];
+let respawnedPowerUp;
+function powerUpsGenerator () {
+  if (timerBtnState === true) {
+    respawnedPowerUp = setInterval(function (){
+      const yPowerUp = canvasArea.height - canvasArea.height - 200;
+      const xPowerUp = generateRandomValue(canvasArea.width);
+      const gravityPowerUpValue = 1.5;
+      const radiusPowerUpValue = 25;
+      let colorPowerUp;
+      let indexOfPowerUp = arrayPowerUpsList.length;
+      let maxNumbIndexoOfPowerUp = Math.floor(generateRandomValuePowerUps(indexOfPowerUp));
+      let powerUpName = arrayPowerUpsList[maxNumbIndexoOfPowerUp];
+      levelPowerGenerated = 'firstLevelPowerUp';
+      if (powerUpName === 'speedUpPower') {
+        colorPowerUp = 'green';
+      } else if (powerUpName === 'smallerPower') {
+        colorPowerUp = 'yellow';
+      } else if (powerUpName === 'switchPower') {
+        colorPowerUp = 'orange';
+      } else if (powerUpName === 'slowPower') {
+        colorPowerUp = 'blue';
+      }
+      arrayPowersUp.push(new powerUp(xPowerUp, yPowerUp, radiusPowerUpValue, startPoint, endPoint, colorPowerUp, gravityPowerUpValue, powerUpName, levelPowerGenerated,false));
+    }, 30000);
+  }
+}
 
+console.log(arrayPowerUpsList);
 // Move function.
 // Function will create a Loop with the AnimationFrame.
 // Loop will Draw and will Clear all from the Canvas Field.
@@ -325,7 +417,6 @@ function animateDraw() {
     let powerUpIndexof = arrayLifePowersUp.indexOf(element);
     if (element.yPowerUpKey + element.radiusPowerUpValue > canvasArea.height + element.radiusPowerUpValue + 200) {
       arrayLifePowersUp.splice(powerUpIndexof, 1);
-      console.log('Life is out.');
     }
   });
 
@@ -334,14 +425,20 @@ function animateDraw() {
     let powerUpIndexof = arrayBoomPowersUp.indexOf(element);
     if (element.yPowerUpKey + element.radiusPowerUpValue > canvasArea.height + element.radiusPowerUpValue + 200) {
       arrayBoomPowersUp.splice(powerUpIndexof, 1);
-      console.log('Boom is out.');
+    }
+  });
+
+  arrayPowersUp.forEach(element => {
+    element.updatedAnimationPowerUp();
+    let powerUpIndexof = arrayPowersUp.indexOf(element);
+    if (element.yPowerUpKey + element.radiusPowerUpValue > canvasArea.height + element.radiusPowerUpValue + 200) {
+      arrayPowersUp.splice(powerUpIndexof, 1);
     }
   });
 
   if (statusLife >= characterLife) {
     timerBtnState = false;
-    clearInterval(respawnedLifePowerUp);
-    clearInterval(respawnedBoomPowerUp);
+    stopCreatingElements ();
     arrayEnemies.forEach(element => {
       element.gravityKey = 0;
     });
@@ -351,7 +448,17 @@ function animateDraw() {
     arrayBoomPowersUp.forEach(element => {
       element.gravityKey = 0;
     });
+    arrayPowersUp.forEach(element => {
+      element.gravityKey = 0;
+    });
   }
+}
+
+function stopCreatingElements () {
+  clearInterval(respawnedEnemies);
+  clearInterval(respawnedLifePowerUp);
+  clearInterval(respawnedBoomPowerUp);
+  clearInterval(respawnedPowerUp);
 }
 
 // Call the AnimatedDraw Function.
@@ -363,6 +470,7 @@ timerBtn.addEventListener('click', function () {
   instructionsBox.setAttribute('class', 'hiddenInformation');
   lifeBox.setAttribute('class', 'hiddenInformation');
   langBox.setAttribute('class', 'langHiddenWrapper');
+  timerBtn.setAttribute('class', 'timerWrapperOnGame');
   timer.innerHTML = '';
   if (langChosen === 1) {
     timer.setAttribute('class', 'cargandoIniciaEstado');
@@ -383,7 +491,7 @@ timerBtn.addEventListener('click', function () {
   enemyGenerator ();
   powerUpsLifeGenerator ();
   powerUpsBoomGenerator ();
-  
+  powerUpsGenerator ();
 });
 
 // Set the EventListeners to the Btns.
